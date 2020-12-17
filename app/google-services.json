@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "439268809552",
+    "firebase_url": "https://serial-cabinet.firebaseio.com",
+    "project_id": "serial-cabinet",
+    "storage_bucket": "serial-cabinet.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:439268809552:android:949673062f3fe3e3a96a55",
+        "android_client_info": {
+          "package_name": "com.weesnerdevelopment.serialcabinet"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "439268809552-geivbctnklc1qkqfnibjvthimpr4guk9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAOvftgPta2ofCKWcl7cxurXNIGdpbEo3c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "439268809552-geivbctnklc1qkqfnibjvthimpr4guk9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
