@@ -41,13 +41,14 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
         useIR = true
+        languageVersion = "1.4"
     }
     buildFeatures {
         compose = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = Versions.compose
-        kotlinCompilerVersion = "1.4.0"
+        kotlinCompilerVersion = Versions.kotlin
     }
 }
 

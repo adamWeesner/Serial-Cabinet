@@ -5,17 +5,19 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 
 private val DarkColorPalette = darkColors(
-    primary = purple200,
-    primaryVariant = purple700,
-    secondary = teal200
+    primary = lightOrange,
+    primaryVariant = darkOrange,
+    secondary = teal
 )
 
 private val LightColorPalette = lightColors(
-    primary = purple500,
-    primaryVariant = purple700,
-    secondary = teal200
+    primary = burntOrange,
+    primaryVariant = darkOrange,
+    secondary = darkTeal,
+    onSecondary = Color.White
 
     /* Other default colors to override
 background = Color.White,
@@ -30,7 +32,7 @@ onSurface = Color.Black,
 @Composable
 fun SerialCabinetTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    content: @Composable() () -> Unit
+    content: @Composable () -> Unit
 ) {
     val colors = if (darkTheme) {
         DarkColorPalette
