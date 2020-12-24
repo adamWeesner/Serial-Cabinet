@@ -1,3 +1,16 @@
 <resources>
     <string name="app_name">Serial Cabinet</string>
+    <string name="empty_cabinet_message">Your cabinet is empty, click the "+" to add items to it.</string>
+    <string name="single_category">%s</string>
+    <string name="two_categories">%s + 1 other</string>
+    <string name="many_categories">%1$s + %2$d other</string>
+    <string name="name">Name</string>
+    <string name="description">Description</string>
+    <string name="add_category">Add Category</string>
+    <string name="barcode">Barcode</string>
+    <string name="barcode_image">Barcode Image</string>
+    <string name="serial_number">Serial Number</string>
+    <string name="model_number">Model Number</string>
+    <string name="update">Update</string>
+    <string name="save">Save</string>
 </resources>
