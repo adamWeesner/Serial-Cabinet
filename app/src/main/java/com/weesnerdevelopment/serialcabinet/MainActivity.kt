@@ -11,13 +11,11 @@ import androidx.compose.runtime.Providers
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.savedinstancestate.rememberSavedInstanceState
 import androidx.compose.ui.platform.setContent
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.viewinterop.viewModel
 import androidx.core.view.WindowCompat
 import com.weesnerdevelopment.frontendutils.AuthViewModel
 import com.weesnerdevelopment.frontendutils.LoginLayout
 import com.weesnerdevelopment.frontendutils.Navigator
-import com.weesnerdevelopment.serialcabinet.ui.SerialCabinetTheme
 import com.weesnerdevelopment.serialcabinet.views.MainView
 import com.weesnerdevelopment.serialcabinet.views.ModifySerialItem
 import com.weesnerdevelopment.serialcabinet.views.SerialItemsList
@@ -121,14 +119,4 @@ fun SerialCabinetApp(
         }
     }
     */
-}
-
-@Preview
-@Composable
-private fun previewMainActivity() {
-    SerialCabinetTheme {
-        MainView {
-            ModifySerialItem()
-        }
-    }
 }

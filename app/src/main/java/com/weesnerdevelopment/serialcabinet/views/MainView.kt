@@ -7,7 +7,6 @@ import androidx.compose.material.icons.outlined.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import com.weesnerdevelopment.serialcabinet.R
 import com.weesnerdevelopment.serialcabinet.components.SerialCabinetToolbar
 import com.weesnerdevelopment.serialcabinet.ui.SerialCabinetTheme
@@ -43,16 +42,6 @@ fun MainView(
             floatingActionButtonPosition = FabPosition.End
         ) {
             content()
-        }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun previewMainView() {
-    SerialCabinetTheme {
-        MainView(fabClick = {}) {
-
         }
     }
 }

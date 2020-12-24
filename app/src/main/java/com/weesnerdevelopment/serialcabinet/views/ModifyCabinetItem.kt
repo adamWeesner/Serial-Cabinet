@@ -10,37 +10,50 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
+import com.weesnerdevelopment.serialcabinet.R
 import com.weesnerdevelopment.serialcabinet.components.ChoiceChip
 import com.weesnerdevelopment.serialcabinet.components.DeletableChip
 import com.weesnerdevelopment.serialcabinet.components.EditText
-import com.weesnerdevelopment.serialcabinet.ui.SerialCabinetTheme
 import shared.serialCabinet.CabinetItem
 import shared.serialCabinet.Electronic
 
-private val Modifier.basePadding get() = padding(2.dp, 8.dp)
-private val Modifier.fullWidthWPadding get() = fillMaxWidth().basePadding
+@Composable
+private val Modifier.basePadding
+    get() = padding(
+        dimensionResource(R.dimen.space_default),
+        dimensionResource(R.dimen.space_default)
+    )
+
+@Composable
+private val Modifier.fullWidthWPadding
+    get() = fillMaxWidth().basePadding
 
 @Composable
 fun ModifySerialItem(item: CabinetItem? = null) {
     Column(
-        modifier = Modifier.padding(8.dp).fillMaxWidth()
+        Modifier.padding(dimensionResource(id = R.dimen.space_default)).fillMaxWidth()
     ) {
-        EditText("Name", item?.name, Modifier.fullWidthWPadding) {
+        EditText(stringResource(R.string.name), item?.name, Modifier.fullWidthWPadding) {
 
         }
 
-        EditText("Description", item?.description, Modifier.fullWidthWPadding) {
+        EditText(
+            stringResource(R.string.description),
+            item?.description,
+            Modifier.fullWidthWPadding
+        ) {
 
         }
 
         ScrollableRow {
-            ChoiceChip(text = "Add Category", Modifier.basePadding) {
+            ChoiceChip(stringResource(R.string.add_category), Modifier.basePadding) {
 
             }
             for (category in item?.categories ?: listOf()) {
-                DeletableChip(text = category.name, Modifier.basePadding) {
+                DeletableChip(category.name, Modifier.basePadding) {
 
                 }
             }
@@ -49,7 +62,11 @@ fun ModifySerialItem(item: CabinetItem? = null) {
         val electronicItem = item as? Electronic
 
         Row {
-            EditText("Barcode", electronicItem?.barcode, Modifier.basePadding) {
+            EditText(
+                stringResource(R.string.barcode),
+                electronicItem?.barcode,
+                Modifier.basePadding.weight(1.5f)
+            ) {
 
             }
 
@@ -57,53 +74,50 @@ fun ModifySerialItem(item: CabinetItem? = null) {
                 BitmapFactory.decodeByteArray(it, 0, it.size)?.let { bitmap ->
                     Image(
                         bitmap = bitmap.asImageBitmap(),
-                        Modifier.basePadding.width(96.dp).height(48.dp)
+                        Modifier.basePadding.weight(1f)
                     )
                 }
+            } ?: Button(
+                {
+
+                },
+                Modifier
+                    .align(Alignment.CenterVertically)
+                    .padding(horizontal = dimensionResource(R.dimen.space_default))
+                    .weight(1f),
+            ) {
+                Text(
+                    text = stringResource(R.string.barcode_image),
+                    textAlign = TextAlign.Center
+                )
             }
         }
 
-        EditText("Serial Number", electronicItem?.serialNumber, Modifier.fullWidthWPadding) {
+        EditText(
+            stringResource(R.string.serial_number),
+            electronicItem?.serialNumber,
+            Modifier.fullWidthWPadding
+        ) {
 
         }
 
-        EditText("Model Number", electronicItem?.modelNumber, Modifier.fullWidthWPadding) {
+        EditText(
+            stringResource(R.string.model_number),
+            electronicItem?.modelNumber,
+            Modifier.fullWidthWPadding
+        ) {
 
         }
 
         Box(Modifier.fillMaxSize()) {
             Button(
+                modifier = Modifier.align(Alignment.BottomEnd).basePadding,
                 onClick = {
 
                 },
-                modifier = Modifier.align(Alignment.BottomEnd)
             ) {
-                Text(text = if (item != null) "Update" else "Save")
+                Text(if (item != null) stringResource(R.string.update) else stringResource(R.string.save))
             }
         }
-    }
-}
-
-@Preview(showBackground = true, widthDp = 440)
-@Composable
-private fun previewSerialItemNullItem() {
-    SerialCabinetTheme {
-        ModifySerialItem()
-    }
-}
-
-@Preview(showBackground = true, widthDp = 440)
-@Composable
-private fun previewSerialItem() {
-    SerialCabinetTheme {
-        ModifySerialItem(item = mockCabinetItem)
-    }
-}
-
-@Preview(showBackground = true, widthDp = 440)
-@Composable
-private fun previewElectronicSerialItem() {
-    SerialCabinetTheme {
-        ModifySerialItem(item = mockElectronicCabinetItem)
     }
 }
