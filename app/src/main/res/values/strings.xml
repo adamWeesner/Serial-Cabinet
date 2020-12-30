@@ -13,4 +13,5 @@
     <string name="model_number">Model Number</string>
     <string name="update">Update</string>
     <string name="save">Save</string>
+    <string name="take_picture">Take picture</string>
 </resources>

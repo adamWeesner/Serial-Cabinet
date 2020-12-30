@@ -23,6 +23,10 @@ sealed class Destination : Parcelable {
 
     @Parcelize
     class ModifyItem(val id: Int? = null) : Destination()
+
+    // Camera
+    @Parcelize
+    object CameraPreview : Destination()
 }
 
 class Actions(private val navigator: Navigator<Destination>) {
@@ -36,6 +40,8 @@ class Actions(private val navigator: Navigator<Destination>) {
 
     val items = { navigator.navigate(Destination.Items) }
     fun modifyItem(id: Int? = null) = navigator.navigate(Destination.ModifyItem(id))
+
+    val camera = { navigator.navigate(Destination.CameraPreview) }
 
     val upPress = { navigator.back() }
 }

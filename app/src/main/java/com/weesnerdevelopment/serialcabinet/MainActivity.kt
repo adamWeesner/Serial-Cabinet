@@ -15,9 +15,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.viewinterop.viewModel
 import androidx.core.view.WindowCompat
 import com.weesnerdevelopment.frontendutils.*
-import com.weesnerdevelopment.serialcabinet.views.MainView
-import com.weesnerdevelopment.serialcabinet.views.ModifySerialItem
-import com.weesnerdevelopment.serialcabinet.views.SerialItemsList
+import com.weesnerdevelopment.serialcabinet.viewmodels.ModifyCabinetItemViewModel
+import com.weesnerdevelopment.serialcabinet.views.*
 import dagger.hilt.android.AndroidEntryPoint
 import kimchi.Kimchi
 import kotlinx.coroutines.flow.collect
@@ -33,10 +32,12 @@ class MainActivity : AppCompatActivity() {
 
         setContent {
             val authViewModel = viewModel<AuthViewModel>()
+            val modifiedItemViewModel = viewModel<ModifyCabinetItemViewModel>()
 
             SerialCabinetApp(
                 onBackPressedDispatcher,
-                authViewModel
+                authViewModel,
+                modifiedItemViewModel
             )
         }
     }
@@ -45,7 +46,8 @@ class MainActivity : AppCompatActivity() {
 @Composable
 fun SerialCabinetApp(
     backDispatcher: OnBackPressedDispatcher,
-    authViewModel: AuthViewModel
+    authViewModel: AuthViewModel,
+    modifyCabinetItemViewModel: ModifyCabinetItemViewModel
 ) {
     val (userError, setUserError) = remember { mutableStateOf(false) }
 
@@ -69,7 +71,7 @@ fun SerialCabinetApp(
                     LoginLayout(
                         authViewModel,
                         actions.createUser,
-                        actions.upPress,
+                        actions.items,
                         TextInputType.Outlined
                     )
                 }
@@ -94,9 +96,26 @@ fun SerialCabinetApp(
                     Icons.Outlined.ArrowBack,
                     loading = loading,
                     snackMessage = snackMessage,
+                    up = {
+                        modifyCabinetItemViewModel.clear()
+                        actions.upPress()
+                    }
+                ) {
+                    ModifySerialItem(
+                        viewModel = modifyCabinetItemViewModel,
+                        item = null,
+                        barcodeCamera = actions.camera
+                    )
+                }
+                is Destination.CameraPreview -> MainView(
+                    Icons.Outlined.ArrowBack,
+                    loading = false,
                     up = actions.upPress
                 ) {
-                    ModifySerialItem(item = null)
+                    CameraPreviewLayout(
+                        viewModel = modifyCabinetItemViewModel,
+                        done = actions.upPress
+                    )
                 }
             }
         }

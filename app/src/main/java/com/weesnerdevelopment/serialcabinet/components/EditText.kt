@@ -3,10 +3,7 @@ package com.weesnerdevelopment.serialcabinet.components
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import com.weesnerdevelopment.serialcabinet.ui.SerialCabinetTheme
 
@@ -17,17 +14,12 @@ fun EditText(
     modifier: Modifier = Modifier,
     valueChange: (String) -> Unit = {}
 ) {
-    val (currentValue, setCurrentValue) = remember {
-        mutableStateOf(TextFieldValue(value ?: ""))
-    }
-
     OutlinedTextField(
         label = { Text(text = label) },
         modifier = modifier,
-        value = currentValue,
+        value = value ?: "",
         onValueChange = {
-            setCurrentValue(it)
-            valueChange(it.text)
+            valueChange(it)
         }
     )
 }
