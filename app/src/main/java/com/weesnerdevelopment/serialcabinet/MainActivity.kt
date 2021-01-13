@@ -15,6 +15,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.viewinterop.viewModel
 import androidx.core.view.WindowCompat
 import com.weesnerdevelopment.frontendutils.*
+import com.weesnerdevelopment.serialcabinet.viewmodels.CategoriesViewModel
 import com.weesnerdevelopment.serialcabinet.viewmodels.ModifyCabinetItemViewModel
 import com.weesnerdevelopment.serialcabinet.views.*
 import dagger.hilt.android.AndroidEntryPoint
@@ -33,11 +34,13 @@ class MainActivity : AppCompatActivity() {
         setContent {
             val authViewModel = viewModel<AuthViewModel>()
             val modifiedItemViewModel = viewModel<ModifyCabinetItemViewModel>()
+            val categoriesViewModel = viewModel<CategoriesViewModel>()
 
             SerialCabinetApp(
                 onBackPressedDispatcher,
                 authViewModel,
-                modifiedItemViewModel
+                modifiedItemViewModel,
+                categoriesViewModel
             )
         }
     }
@@ -47,7 +50,8 @@ class MainActivity : AppCompatActivity() {
 fun SerialCabinetApp(
     backDispatcher: OnBackPressedDispatcher,
     authViewModel: AuthViewModel,
-    modifyCabinetItemViewModel: ModifyCabinetItemViewModel
+    modifyCabinetItemViewModel: ModifyCabinetItemViewModel,
+    categoriesViewModel: CategoriesViewModel
 ) {
     val (userError, setUserError) = remember { mutableStateOf(false) }
 
@@ -102,7 +106,8 @@ fun SerialCabinetApp(
                     }
                 ) {
                     ModifySerialItem(
-                        viewModel = modifyCabinetItemViewModel,
+                        itemViewModel = modifyCabinetItemViewModel,
+                        categoriesViewModel = categoriesViewModel,
                         item = null,
                         barcodeCamera = actions.camera
                     )
