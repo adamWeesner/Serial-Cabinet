@@ -9,7 +9,8 @@ import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
@@ -21,40 +22,70 @@ import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat.requestPermissions
 import com.weesnerdevelopment.serialcabinet.R
 import com.weesnerdevelopment.serialcabinet.basePadding
+import com.weesnerdevelopment.serialcabinet.components.BasicListItem
 import com.weesnerdevelopment.serialcabinet.components.ChoiceChip
 import com.weesnerdevelopment.serialcabinet.components.DeletableChip
 import com.weesnerdevelopment.serialcabinet.components.EditText
 import com.weesnerdevelopment.serialcabinet.fullWidthWPadding
+import com.weesnerdevelopment.serialcabinet.viewmodels.CategoriesViewModel
 import com.weesnerdevelopment.serialcabinet.viewmodels.ModifyCabinetItemViewModel
 import shared.serialCabinet.CabinetItem
+import shared.serialCabinet.Category
 
 @Composable
 fun ModifySerialItem(
-    viewModel: ModifyCabinetItemViewModel,
+    itemViewModel: ModifyCabinetItemViewModel,
+    categoriesViewModel: CategoriesViewModel,
     item: CabinetItem? = null,
     barcodeCamera: () -> Unit
 ) {
     val context = AmbientContext.current
+    val (choosingCategories, setChoosingCategories) = remember { mutableStateOf(false) }
 
-    if (item != null) viewModel.currentItem(item)
+    if (item != null) itemViewModel.currentItem(item)
 
-    val name by viewModel.name.value.observeAsState()
-    val description by viewModel.description.value.observeAsState()
-    val categories by viewModel.categories.value.observeAsState()
-    val barcode by viewModel.barcode.value.observeAsState()
-    val barcodeImage by viewModel.barcodeImage.value.observeAsState()
-    val serialNumber by viewModel.serialNumber.value.observeAsState()
-    val modelNumber by viewModel.modelNumber.value.observeAsState()
+    val name by itemViewModel.name.collectAsState()
+    val description by itemViewModel.description.collectAsState()
+    val categories by itemViewModel.categories.collectAsState()
+    val barcode by itemViewModel.barcode.collectAsState()
+    val barcodeImage by itemViewModel.barcodeImage.collectAsState()
+    val serialNumber by itemViewModel.serialNumber.collectAsState()
+    val modelNumber by itemViewModel.modelNumber.collectAsState()
+
+    val allCategories by categoriesViewModel.allCategories.collectAsState()
+
+    categoriesViewModel.getCategories()
+
+    if (choosingCategories)
+        ListDialog(
+            items = listOf(
+                Category(-1, "Add Category", "Adds a new category.")
+            ) + allCategories,
+            saveClick = { setChoosingCategories(false) },
+            dismiss = { setChoosingCategories(false) },
+            itemView = {
+                BasicListItem(name = it.name) {
+                    val mutableCategories = categories.toMutableList()
+
+                    if (categories.contains(it)) mutableCategories.remove(it)
+                    else mutableCategories.add(it)
+
+                    itemViewModel.categories.set(mutableCategories)
+                }
+            }
+        )
 
     Column(
-        Modifier.padding(dimensionResource(id = R.dimen.space_default)).fillMaxWidth()
+        Modifier
+            .padding(dimensionResource(id = R.dimen.space_default))
+            .fillMaxWidth()
     ) {
         EditText(
             stringResource(R.string.name),
             name,
             Modifier.fullWidthWPadding
         ) {
-            viewModel.name.setValue(it)
+            itemViewModel.name.set(it)
         }
 
         EditText(
@@ -62,14 +93,14 @@ fun ModifySerialItem(
             description,
             Modifier.fullWidthWPadding
         ) {
-            viewModel.description.setValue(it)
+            itemViewModel.description.set(it)
         }
 
         ScrollableRow {
             ChoiceChip(stringResource(R.string.add_category), Modifier.basePadding) {
-
+                setChoosingCategories(true)
             }
-            for (category in categories ?: listOf()) {
+            for (category in categories) {
                 DeletableChip(category.name, Modifier.basePadding) {
 
                 }
@@ -82,14 +113,17 @@ fun ModifySerialItem(
                 barcode,
                 Modifier.basePadding.weight(1.5f)
             ) {
-                viewModel.barcode.setValue(it)
+                itemViewModel.barcode.set(it)
             }
 
             barcodeImage?.let {
                 BitmapFactory.decodeByteArray(it, 0, it.size)?.let { bitmap ->
                     Image(
                         bitmap = bitmap.asImageBitmap(),
-                        Modifier.basePadding.weight(1f).heightIn(48.dp, 56.dp)
+                        Modifier
+                            .basePadding
+                            .weight(1f)
+                            .heightIn(48.dp, 56.dp)
                     )
                 }
             } ?: Button(
@@ -117,7 +151,7 @@ fun ModifySerialItem(
             serialNumber,
             Modifier.fullWidthWPadding
         ) {
-            viewModel.serialNumber.setValue(it)
+            itemViewModel.serialNumber.set(it)
         }
 
         EditText(
@@ -125,7 +159,7 @@ fun ModifySerialItem(
             modelNumber,
             Modifier.fullWidthWPadding
         ) {
-            viewModel.modelNumber.setValue(it)
+            itemViewModel.modelNumber.set(it)
         }
 
         Box(Modifier.fillMaxSize()) {

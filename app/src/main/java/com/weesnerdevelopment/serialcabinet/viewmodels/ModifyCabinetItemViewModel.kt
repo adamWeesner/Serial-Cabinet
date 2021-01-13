@@ -1,12 +1,11 @@
 package com.weesnerdevelopment.serialcabinet.viewmodels
 
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
 import shared.serialCabinet.CabinetItem
 import shared.serialCabinet.Category
 import shared.serialCabinet.Electronic
 
-class ModifyCabinetItemViewModel @ViewModelInject constructor() : ViewModel() {
+class ModifyCabinetItemViewModel : ViewModel() {
     val name = ViewModelItem("")
     val description = ViewModelItem("")
     val categories = ViewModelItem<List<Category>>(listOf())
@@ -17,15 +16,15 @@ class ModifyCabinetItemViewModel @ViewModelInject constructor() : ViewModel() {
     val modelNumber = ViewModelItem("")
 
     fun currentItem(item: CabinetItem) {
-        name.setValue(item.name)
-        description.setValue(item.description)
-        categories.setValue(item.categories)
+        name.set(item.name)
+        description.set(item.description)
+        categories.set(item.categories)
 
         if (item is Electronic) {
-            barcode.setValue(item.barcode ?: "")
-            barcodeImage.setValue(item.barcodeImage)
-            serialNumber.setValue(item.serialNumber ?: "")
-            modelNumber.setValue(item.modelNumber ?: "")
+            barcode.set(item.barcode ?: "")
+            barcodeImage.set(item.barcodeImage)
+            serialNumber.set(item.serialNumber ?: "")
+            modelNumber.set(item.modelNumber ?: "")
         }
     }
 

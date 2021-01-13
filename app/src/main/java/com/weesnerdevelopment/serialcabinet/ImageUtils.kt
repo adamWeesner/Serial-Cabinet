@@ -57,9 +57,9 @@ private fun findBarcode(imageProxy: ImageProxy, viewModel: ModifyCabinetItemView
                 }
 
                 barcodes.first()?.also { barcode ->
-                    viewModel.barcode.setValue(barcode.displayValue ?: barcode.rawValue)
+                    viewModel.barcode.set(barcode.displayValue ?: barcode.rawValue)
                     val imageBytes = imageProxy.adjustImage(barcode)
-                    viewModel.barcodeImage.setValue(imageBytes)
+                    viewModel.barcodeImage.set(imageBytes)
                 }
                 imageProxy.close()
             }
