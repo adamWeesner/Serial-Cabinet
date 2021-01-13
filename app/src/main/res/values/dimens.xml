@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="space_small">2dp</dimen>
+    <dimen name="space_quarter">2dp</dimen>
+    <dimen name="space_half">4dp</dimen>
     <dimen name="space_default">8dp</dimen>
+    <dimen name="space_one_and_a_quarter">10dp</dimen>
     <dimen name="space_one_and_a_half">12dp</dimen>
     <dimen name="space_double">16dp</dimen>
+    <dimen name="space_triple">24dp</dimen>
 </resources>

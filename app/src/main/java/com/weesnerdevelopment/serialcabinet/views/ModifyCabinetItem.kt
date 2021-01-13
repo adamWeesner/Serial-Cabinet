@@ -27,6 +27,7 @@ import com.weesnerdevelopment.serialcabinet.components.ChoiceChip
 import com.weesnerdevelopment.serialcabinet.components.DeletableChip
 import com.weesnerdevelopment.serialcabinet.components.EditText
 import com.weesnerdevelopment.serialcabinet.fullWidthWPadding
+import com.weesnerdevelopment.serialcabinet.smallHorizontal
 import com.weesnerdevelopment.serialcabinet.viewmodels.CategoriesViewModel
 import com.weesnerdevelopment.serialcabinet.viewmodels.ModifyCabinetItemViewModel
 import shared.serialCabinet.CabinetItem
@@ -41,6 +42,7 @@ fun ModifySerialItem(
 ) {
     val context = AmbientContext.current
     val (choosingCategories, setChoosingCategories) = remember { mutableStateOf(false) }
+    val (addCategory, setAddCategory) = remember { mutableStateOf(false) }
 
     if (item != null) itemViewModel.currentItem(item)
 
@@ -54,17 +56,22 @@ fun ModifySerialItem(
 
     val allCategories by categoriesViewModel.allCategories.collectAsState()
 
-    categoriesViewModel.getCategories()
+    remember { categoriesViewModel.getCategories() }
 
     if (choosingCategories)
         ListDialog(
             items = listOf(
-                Category(-1, "Add Category", "Adds a new category.")
+                Category(-1, stringResource(R.string.add_category), "Adds a new category.")
             ) + allCategories,
             saveClick = { setChoosingCategories(false) },
             dismiss = { setChoosingCategories(false) },
             itemView = {
-                BasicListItem(name = it.name) {
+                BasicListItem(name = it.name, categories.contains(it)) {
+                    if (it.id == -1) {
+                        setAddCategory(true)
+                        return@BasicListItem
+                    }
+
                     val mutableCategories = categories.toMutableList()
 
                     if (categories.contains(it)) mutableCategories.remove(it)
@@ -74,6 +81,9 @@ fun ModifySerialItem(
                 }
             }
         )
+
+    if (addCategory)
+        AddCategoryDialog(categoriesViewModel) { setAddCategory(false) }
 
     Column(
         Modifier
@@ -101,8 +111,10 @@ fun ModifySerialItem(
                 setChoosingCategories(true)
             }
             for (category in categories) {
-                DeletableChip(category.name, Modifier.basePadding) {
-
+                DeletableChip(category.name, Modifier.smallHorizontal) {
+                    val mutableCategories = categories.toMutableList()
+                    mutableCategories.remove(category)
+                    itemViewModel.categories.set(mutableCategories)
                 }
             }
         }
@@ -111,7 +123,7 @@ fun ModifySerialItem(
             EditText(
                 stringResource(R.string.barcode),
                 barcode,
-                Modifier.basePadding.weight(1.5f)
+                Modifier.basePadding.weight(1.25f)
             ) {
                 itemViewModel.barcode.set(it)
             }

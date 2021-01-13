@@ -80,6 +80,7 @@ dependencies {
     implementation("androidx.camera:camera-lifecycle:${Versions.camera}")
     implementation("androidx.camera:camera-view:1.0.0-alpha20")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.0-rc01")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.3.0-rc01")
     implementation("androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha02")
     implementation("com.google.dagger:hilt-android:2.28-alpha")

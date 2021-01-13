@@ -18,8 +18,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.weesnerdevelopment.serialcabinet.R
 import com.weesnerdevelopment.serialcabinet.ui.SerialCabinetTheme
 
 @Composable
@@ -58,10 +60,12 @@ fun Chip(
             else -> MaterialTheme.colors.onSurface
         },
         shape = CircleShape,
-        modifier = modifier.clip(CircleShape).clickable(onClick = {
-            if (selectable) setCurrentlySelected(!currentlySelected)
-            onClick(currentlySelected)
-        })
+        modifier = modifier
+            .clip(CircleShape)
+            .clickable(onClick = {
+                if (selectable) setCurrentlySelected(!currentlySelected)
+                onClick(currentlySelected)
+            })
     ) {
         Row {
             Text(
@@ -69,10 +73,10 @@ fun Chip(
                 style = MaterialTheme.typography.body2,
                 modifier = Modifier
                     .padding(
-                        start = 16.dp,
-                        end = if (deletable) 0.dp else 16.dp,
-                        bottom = 8.dp,
-                        top = 8.dp
+                        start = dimensionResource(R.dimen.space_double),
+                        end = if (deletable) 0.dp else dimensionResource(R.dimen.space_double),
+                        bottom = if (deletable) 0.dp else dimensionResource(R.dimen.space_one_and_a_quarter),
+                        top = if (deletable) 0.dp else dimensionResource(R.dimen.space_one_and_a_quarter)
                     )
                     .align(Alignment.CenterVertically)
             )
@@ -81,14 +85,12 @@ fun Chip(
                 Image(
                     imageVector = Icons.Outlined.Close,
                     modifier = modifier
-                        .padding(end = 4.dp)
+                        .padding(end = dimensionResource(R.dimen.space_half))
                         .align(Alignment.CenterVertically)
-                        .height(24.dp)
+                        .height(dimensionResource(R.dimen.space_triple))
                         .clip(CircleShape)
-                        .clickable(onClick = {
-                            onDelete()
-                        })
-                        .padding(4.dp)
+                        .clickable(onClick = onDelete)
+                        .padding(dimensionResource(R.dimen.space_quarter))
                 )
         }
     }
@@ -98,7 +100,10 @@ fun Chip(
 @Composable
 private fun previewChoiceChip() {
     SerialCabinetTheme {
-        ChoiceChip(text = "Banana", modifier = Modifier.padding(4.dp))
+        ChoiceChip(
+            text = "Banana",
+            modifier = Modifier.padding(dimensionResource(R.dimen.space_default))
+        )
     }
 }
 
@@ -108,9 +113,7 @@ private fun previewChoiceChipDeletable() {
     SerialCabinetTheme {
         DeletableChip(
             text = "Banana",
-            modifier = Modifier.padding(4.dp),
-        ) {
-
-        }
+            modifier = Modifier.padding(dimensionResource(R.dimen.space_default)),
+        ) {}
     }
 }
