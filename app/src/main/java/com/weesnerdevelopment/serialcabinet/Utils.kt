@@ -8,10 +8,11 @@ import androidx.compose.ui.res.dimensionResource
 
 @Composable
 val Modifier.basePadding
-    get() = padding(
-        dimensionResource(R.dimen.space_default),
-        dimensionResource(R.dimen.space_default)
-    )
+    get() = padding(dimensionResource(R.dimen.space_default))
+
+@Composable
+val Modifier.smallHorizontal
+    get() = padding(dimensionResource(R.dimen.space_half), dimensionResource(R.dimen.space_default))
 
 @Composable
 val Modifier.fullWidthWPadding
