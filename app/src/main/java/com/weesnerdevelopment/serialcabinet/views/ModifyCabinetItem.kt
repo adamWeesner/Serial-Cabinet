@@ -5,8 +5,6 @@ import android.graphics.BitmapFactory
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollableRow
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Button
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -17,15 +15,11 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.AmbientContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat.requestPermissions
 import com.weesnerdevelopment.serialcabinet.R
 import com.weesnerdevelopment.serialcabinet.basePadding
-import com.weesnerdevelopment.serialcabinet.components.BasicListItem
-import com.weesnerdevelopment.serialcabinet.components.ChoiceChip
-import com.weesnerdevelopment.serialcabinet.components.DeletableChip
-import com.weesnerdevelopment.serialcabinet.components.EditText
+import com.weesnerdevelopment.serialcabinet.components.*
 import com.weesnerdevelopment.serialcabinet.fullWidthWPadding
 import com.weesnerdevelopment.serialcabinet.smallHorizontal
 import com.weesnerdevelopment.serialcabinet.viewmodels.CategoriesViewModel
@@ -139,22 +133,17 @@ fun ModifySerialItem(
                     )
                 }
             } ?: Button(
-                onClick = {
-                    val cameraPerm = arrayOf(android.Manifest.permission.CAMERA)
-                    if (!hasPermissions(context, cameraPerm))
-                        requestPermissions(context as Activity, cameraPerm, 999)
-                    else
-                        barcodeCamera()
-                },
-                Modifier
+                text = R.string.barcode_image,
+                modifier = Modifier
                     .align(Alignment.CenterVertically)
                     .padding(horizontal = dimensionResource(R.dimen.space_default))
                     .weight(1f),
             ) {
-                Text(
-                    text = stringResource(R.string.barcode_image),
-                    textAlign = TextAlign.Center
-                )
+                val cameraPerm = arrayOf(android.Manifest.permission.CAMERA)
+                if (!hasPermissions(context, cameraPerm))
+                    requestPermissions(context as Activity, cameraPerm, 999)
+                else
+                    barcodeCamera()
             }
         }
 
@@ -176,12 +165,10 @@ fun ModifySerialItem(
 
         Box(Modifier.fillMaxSize()) {
             Button(
-                modifier = Modifier.align(Alignment.BottomEnd).basePadding,
-                onClick = {
-
-                },
+                text = if (item != null) R.string.update else R.string.save,
+                modifier = Modifier.align(Alignment.BottomEnd).basePadding
             ) {
-                Text(if (item != null) stringResource(R.string.update) else stringResource(R.string.save))
+
             }
         }
     }

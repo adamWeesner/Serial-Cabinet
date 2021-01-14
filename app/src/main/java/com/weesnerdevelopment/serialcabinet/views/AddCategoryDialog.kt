@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -19,6 +18,7 @@ import androidx.compose.ui.window.Dialog
 import com.weesnerdevelopment.serialcabinet.R
 import com.weesnerdevelopment.serialcabinet.basePadding
 import com.weesnerdevelopment.serialcabinet.components.EditText
+import com.weesnerdevelopment.serialcabinet.components.TextButton
 import com.weesnerdevelopment.serialcabinet.viewmodels.CategoriesViewModel
 import shared.serialCabinet.Category
 
@@ -66,16 +66,11 @@ fun AddCategoryDialog(
                         .wrapContentSize()
                         .padding(top = dimensionResource(R.dimen.space_default))
                 ) {
-                    TextButton(onClick = {
+                    TextButton(R.string.save) {
                         categoriesViewModel.addCategory(
-                            Category(
-                                name = name,
-                                description = description
-                            )
+                            Category(name = name, description = description)
                         )
                         dismiss()
-                    }) {
-                        Text(stringResource(R.string.save))
                     }
                 }
             }

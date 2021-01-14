@@ -8,7 +8,6 @@ import androidx.compose.foundation.lazy.LazyColumnFor
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -17,6 +16,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.window.Dialog
 import com.weesnerdevelopment.serialcabinet.R
 import com.weesnerdevelopment.serialcabinet.basePadding
+import com.weesnerdevelopment.serialcabinet.components.TextButton
 
 @Composable
 fun <T> ListDialog(
@@ -52,9 +52,7 @@ fun <T> ListDialog(
                         .wrapContentSize()
                         .padding(top = dimensionResource(R.dimen.space_default))
                 ) {
-                    TextButton(onClick = saveClick) {
-                        Text(stringResource(R.string.update))
-                    }
+                    TextButton(text = R.string.update, click = saveClick)
                 }
             }
         }
