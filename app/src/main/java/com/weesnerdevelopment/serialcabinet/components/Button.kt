@@ -11,11 +11,13 @@ import androidx.compose.ui.text.style.TextAlign
 fun Button(
     @StringRes text: Int,
     modifier: Modifier = Modifier,
+    enabled: Boolean = true,
     click: () -> Unit,
 ) {
     androidx.compose.material.Button(
         onClick = click,
-        modifier = modifier
+        modifier = modifier,
+        enabled = enabled
     ) {
         Text(
             text = stringResource(text),
@@ -28,9 +30,11 @@ fun Button(
 fun TextButton(
     @StringRes text: Int,
     modifier: Modifier = Modifier,
+    enabled: Boolean = true,
     click: () -> Unit
 ) {
     androidx.compose.material.TextButton(
+        enabled = enabled,
         modifier = modifier,
         onClick = click
     ) {
