@@ -15,4 +15,5 @@
     <string name="save">Save</string>
     <string name="take_picture">Take picture</string>
     <string name="categories">Categories</string>
+    <string name="blank_message">%s cannot be blank</string>
 </resources>

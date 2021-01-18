@@ -17,20 +17,27 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat.requestPermissions
+import com.weesnerdevelopment.frontendutils.AuthViewModel
 import com.weesnerdevelopment.serialcabinet.R
 import com.weesnerdevelopment.serialcabinet.basePadding
 import com.weesnerdevelopment.serialcabinet.components.*
 import com.weesnerdevelopment.serialcabinet.fullWidthWPadding
 import com.weesnerdevelopment.serialcabinet.smallHorizontal
 import com.weesnerdevelopment.serialcabinet.viewmodels.CategoriesViewModel
+import com.weesnerdevelopment.serialcabinet.viewmodels.ElectronicsViewModel
 import com.weesnerdevelopment.serialcabinet.viewmodels.ModifyCabinetItemViewModel
 import shared.serialCabinet.CabinetItem
 import shared.serialCabinet.Category
+import shared.serialCabinet.Electronic
+import shared.serialCabinet.Manufacturer
+import java.util.*
 
 @Composable
 fun ModifySerialItem(
+    authViewModel: AuthViewModel,
     itemViewModel: ModifyCabinetItemViewModel,
     categoriesViewModel: CategoriesViewModel,
+    electronicsViewModel: ElectronicsViewModel,
     item: CabinetItem? = null,
     barcodeCamera: () -> Unit
 ) {
@@ -41,12 +48,24 @@ fun ModifySerialItem(
     if (item != null) itemViewModel.currentItem(item)
 
     val name by itemViewModel.name.collectAsState()
+    val nameError by itemViewModel.nameError.collectAsState()
+
     val description by itemViewModel.description.collectAsState()
+    val descriptionError by itemViewModel.descriptionError.collectAsState()
+
     val categories by itemViewModel.categories.collectAsState()
+    val categoriesError by itemViewModel.categoriesError.collectAsState()
+
     val barcode by itemViewModel.barcode.collectAsState()
+    val barcodeError by itemViewModel.barcodeError.collectAsState()
+
     val barcodeImage by itemViewModel.barcodeImage.collectAsState()
+
     val serialNumber by itemViewModel.serialNumber.collectAsState()
+    val serialNumberError by itemViewModel.serialNumberError.collectAsState()
+
     val modelNumber by itemViewModel.modelNumber.collectAsState()
+    val modelNumberError by itemViewModel.modelNumberError.collectAsState()
 
     val allCategories by categoriesViewModel.allCategories.collectAsState()
 
@@ -85,19 +104,23 @@ fun ModifySerialItem(
             .fillMaxWidth()
     ) {
         EditText(
-            stringResource(R.string.name),
-            name,
-            Modifier.fullWidthWPadding
+            label = R.string.name,
+            value = name,
+            modifier = Modifier.fullWidthWPadding,
+            helperText = if (nameError) R.string.blank_message else null,
+            isError = nameError
         ) {
-            itemViewModel.name.set(it)
+            itemViewModel.name.set(it, itemViewModel.nameError)
         }
 
         EditText(
-            stringResource(R.string.description),
-            description,
-            Modifier.fullWidthWPadding
+            label = R.string.description,
+            value = description,
+            modifier = Modifier.fullWidthWPadding,
+            helperText = if (descriptionError) R.string.blank_message else null,
+            isError = descriptionError
         ) {
-            itemViewModel.description.set(it)
+            itemViewModel.description.set(it, itemViewModel.descriptionError)
         }
 
         ScrollableRow {
@@ -115,11 +138,13 @@ fun ModifySerialItem(
 
         Row {
             EditText(
-                stringResource(R.string.barcode),
-                barcode,
-                Modifier.basePadding.weight(1.25f)
+                label = R.string.barcode,
+                value = barcode,
+                modifier = Modifier.basePadding.weight(1.25f),
+                helperText = if (barcodeError) R.string.blank_message else null,
+                isError = barcodeError
             ) {
-                itemViewModel.barcode.set(it)
+                itemViewModel.barcode.set(it, itemViewModel.barcodeError)
             }
 
             barcodeImage?.let {
@@ -148,27 +173,60 @@ fun ModifySerialItem(
         }
 
         EditText(
-            stringResource(R.string.serial_number),
-            serialNumber,
-            Modifier.fullWidthWPadding
+            label = R.string.serial_number,
+            value = serialNumber,
+            modifier = Modifier.fullWidthWPadding,
+            helperText = if (serialNumberError) R.string.blank_message else null,
+            isError = serialNumberError
         ) {
-            itemViewModel.serialNumber.set(it)
+            itemViewModel.serialNumber.set(it, itemViewModel.serialNumberError)
         }
 
         EditText(
-            stringResource(R.string.model_number),
-            modelNumber,
-            Modifier.fullWidthWPadding
+            label = R.string.model_number,
+            value = modelNumber,
+            modifier = Modifier.fullWidthWPadding,
+            helperText = if (modelNumberError) R.string.blank_message else null,
+            isError = modelNumberError
         ) {
-            itemViewModel.modelNumber.set(it)
+            itemViewModel.modelNumber.set(it, itemViewModel.modelNumberError)
         }
 
         Box(Modifier.fillMaxSize()) {
             Button(
+                enabled = listOf(
+                    nameError,
+                    descriptionError,
+                    barcodeError,
+                    serialNumberError,
+                    modelNumberError
+                ).all { !it },
                 text = if (item != null) R.string.update else R.string.save,
                 modifier = Modifier.align(Alignment.BottomEnd).basePadding
             ) {
+                if (itemViewModel.checkForErrors()) {
+                    println("has at least one...")
+                    return@Button
+                }
 
+                println("doesnt have any errors...")
+                electronicsViewModel.addElectronic(
+                    Electronic(
+                        owner = authViewModel.currentUser
+                            ?: throw IllegalArgumentException("No user found."),
+                        name = name,
+                        description = description,
+                        categories = categories,
+                        image = null,
+                        barcode = barcode,
+                        barcodeImage = barcodeImage,
+                        serialNumber = serialNumber,
+                        modelNumber = modelNumber,
+                        manufacturer = Manufacturer(1, "random"),
+                        manufactureDate = Date().time,
+                        purchaseDate = Date().time
+                    )
+                )
             }
         }
     }

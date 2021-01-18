@@ -5,18 +5,23 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.weesnerdevelopment.serialcabinet.R
-import shared.serialCabinet.CabinetItem
+import com.weesnerdevelopment.serialcabinet.viewmodels.ElectronicsViewModel
 
 @Composable
-fun SerialItemsList(items: List<CabinetItem>) {
+fun SerialItemsList(electronicsViewModel: ElectronicsViewModel) {
+    val items by electronicsViewModel.allElectronics.collectAsState()
+
     if (items.isEmpty())
         Text(
             stringResource(R.string.empty_cabinet_message),
-            Modifier.fillMaxSize().wrapContentSize(Alignment.Center)
+            Modifier
+                .fillMaxSize()
+                .wrapContentSize(Alignment.Center)
         )
     else
         ScrollableColumn {

@@ -7,13 +7,24 @@ import shared.serialCabinet.Electronic
 
 class ModifyCabinetItemViewModel : ViewModel() {
     val name = ViewModelItem("")
+    val nameError = ViewModelItem(false)
+
     val description = ViewModelItem("")
-    val categories = ViewModelItem<List<Category>>(listOf())
+    val descriptionError = ViewModelItem(false)
+
+    val categories = ViewModelItem(emptyList<Category>())
+    val categoriesError = ViewModelItem(false)
 
     val barcode = ViewModelItem("")
+    val barcodeError = ViewModelItem(false)
+
     val barcodeImage = ViewModelItem<ByteArray?>(null)
+
     val serialNumber = ViewModelItem("")
+    val serialNumberError = ViewModelItem(false)
+
     val modelNumber = ViewModelItem("")
+    val modelNumberError = ViewModelItem(false)
 
     fun currentItem(item: CabinetItem) {
         name.set(item.name)
@@ -26,6 +37,19 @@ class ModifyCabinetItemViewModel : ViewModel() {
             serialNumber.set(item.serialNumber ?: "")
             modelNumber.set(item.modelNumber ?: "")
         }
+    }
+
+    fun checkForErrors(): Boolean {
+        var hasError = false
+
+        name.checkError(nameError).also { if (!hasError) hasError = it }
+        description.checkError(descriptionError).also { if (!hasError) hasError = it }
+        categories.checkError(categoriesError).also { if (!hasError) hasError = it }
+        barcode.checkError(barcodeError).also { if (!hasError) hasError = it }
+        serialNumber.checkError(serialNumberError).also { if (!hasError) hasError = it }
+        modelNumber.checkError(modelNumberError).also { if (!hasError) hasError = it }
+
+        return hasError
     }
 
     fun clear() {

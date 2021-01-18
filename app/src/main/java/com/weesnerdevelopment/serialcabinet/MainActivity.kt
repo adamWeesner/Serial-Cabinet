@@ -16,6 +16,7 @@ import androidx.compose.ui.viewinterop.viewModel
 import androidx.core.view.WindowCompat
 import com.weesnerdevelopment.frontendutils.*
 import com.weesnerdevelopment.serialcabinet.viewmodels.CategoriesViewModel
+import com.weesnerdevelopment.serialcabinet.viewmodels.ElectronicsViewModel
 import com.weesnerdevelopment.serialcabinet.viewmodels.ModifyCabinetItemViewModel
 import com.weesnerdevelopment.serialcabinet.views.*
 import dagger.hilt.android.AndroidEntryPoint
@@ -35,12 +36,14 @@ class MainActivity : AppCompatActivity() {
             val authViewModel = viewModel<AuthViewModel>()
             val modifiedItemViewModel = viewModel<ModifyCabinetItemViewModel>()
             val categoriesViewModel = viewModel<CategoriesViewModel>()
+            val electronicsViewModel = viewModel<ElectronicsViewModel>()
 
             SerialCabinetApp(
                 onBackPressedDispatcher,
                 authViewModel,
                 modifiedItemViewModel,
-                categoriesViewModel
+                categoriesViewModel,
+                electronicsViewModel
             )
         }
     }
@@ -51,7 +54,8 @@ fun SerialCabinetApp(
     backDispatcher: OnBackPressedDispatcher,
     authViewModel: AuthViewModel,
     modifyCabinetItemViewModel: ModifyCabinetItemViewModel,
-    categoriesViewModel: CategoriesViewModel
+    categoriesViewModel: CategoriesViewModel,
+    electronicsViewModel: ElectronicsViewModel
 ) {
     val (userError, setUserError) = remember { mutableStateOf(false) }
 
@@ -93,9 +97,8 @@ fun SerialCabinetApp(
                 Destination.Items -> MainView(
                     loading = loading,
                     snackMessage = snackMessage,
-                    fabClick = { actions.modifyItem() }) {
-                    SerialItemsList(items = emptyList())
-                }
+                    fabClick = { actions.modifyItem() }
+                ) { SerialItemsList(electronicsViewModel) }
                 is Destination.ModifyItem -> MainView(
                     Icons.Outlined.ArrowBack,
                     loading = loading,
@@ -106,8 +109,10 @@ fun SerialCabinetApp(
                     }
                 ) {
                     ModifySerialItem(
+                        authViewModel = authViewModel,
                         itemViewModel = modifyCabinetItemViewModel,
                         categoriesViewModel = categoriesViewModel,
+                        electronicsViewModel = electronicsViewModel,
                         item = null,
                         barcodeCamera = actions.camera
                     )
@@ -145,6 +150,9 @@ fun SerialCabinetApp(
                     setLoading(false)
 //                    navController.go { NavGraphDirections.actionGlobalAddUserNameDialogFragment() }
                 }
+
+                electronicsViewModel.getElectronics()
+                categoriesViewModel.getCategories()
 
                 setLoading(false)
             }
