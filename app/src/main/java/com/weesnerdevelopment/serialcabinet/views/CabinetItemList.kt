@@ -13,7 +13,10 @@ import com.weesnerdevelopment.serialcabinet.R
 import com.weesnerdevelopment.serialcabinet.viewmodels.ElectronicsViewModel
 
 @Composable
-fun SerialItemsList(electronicsViewModel: ElectronicsViewModel) {
+fun SerialItemsList(
+    electronicsViewModel: ElectronicsViewModel,
+    itemClick: (id: Int?) -> Unit
+) {
     val items by electronicsViewModel.allElectronics.collectAsState()
 
     if (items.isEmpty())
@@ -25,6 +28,7 @@ fun SerialItemsList(electronicsViewModel: ElectronicsViewModel) {
         )
     else
         ScrollableColumn {
-            for (item in items) SerialItem(item = item)
+            for (item in items)
+                SerialItem(item = item, click = itemClick)
         }
 }

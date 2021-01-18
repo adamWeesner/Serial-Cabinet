@@ -102,7 +102,11 @@ fun SerialCabinetApp(
                     loading = loading,
                     snackMessage = snackMessage,
                     fabClick = { actions.modifyItem() }
-                ) { SerialItemsList(electronicsViewModel) }
+                ) {
+                    SerialItemsList(electronicsViewModel) {
+                        actions.modifyItem(it)
+                    }
+                }
                 is Destination.ModifyItem -> MainView(
                     Icons.Outlined.ArrowBack,
                     loading = loading,
@@ -118,7 +122,7 @@ fun SerialCabinetApp(
                         categoriesViewModel = categoriesViewModel,
                         electronicsViewModel = electronicsViewModel,
                         manufacturersViewModel = manufacturersViewModel,
-                        item = null,
+                        item = electronicsViewModel.allElectronics.value.firstOrNull { it.id == destination.id },
                         back = {
                             modifyCabinetItemViewModel.clear()
                             actions.upPress()

@@ -47,7 +47,7 @@ fun ModifySerialItem(
     val (choosingCategories, setChoosingCategories) = remember { mutableStateOf(false) }
     val (addCategory, setAddCategory) = remember { mutableStateOf(false) }
 
-    if (item != null) itemViewModel.currentItem(item)
+    itemViewModel.currentItem(item)
 
     val name by itemViewModel.name.collectAsState()
     val nameError by itemViewModel.nameError.collectAsState()

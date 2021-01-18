@@ -26,16 +26,16 @@ class ModifyCabinetItemViewModel : ViewModel() {
     val modelNumber = ViewModelItem("")
     val modelNumberError = ViewModelItem(false)
 
-    fun currentItem(item: CabinetItem) {
-        name.set(item.name)
-        description.set(item.description)
-        categories.set(item.categories)
+    fun currentItem(item: CabinetItem?) {
+        name.set(item?.name ?: "")
+        description.set(item?.description ?: "")
+        categories.set(item?.categories ?: emptyList())
 
-        if (item is Electronic) {
-            barcode.set(item.barcode ?: "")
-            barcodeImage.set(item.barcodeImage)
-            serialNumber.set(item.serialNumber ?: "")
-            modelNumber.set(item.modelNumber ?: "")
+        (item as? Electronic).let { electronic ->
+            barcode.set(electronic?.barcode ?: "")
+            barcodeImage.set(electronic?.barcodeImage)
+            serialNumber.set(electronic?.serialNumber ?: "")
+            modelNumber.set(electronic?.modelNumber ?: "")
         }
     }
 

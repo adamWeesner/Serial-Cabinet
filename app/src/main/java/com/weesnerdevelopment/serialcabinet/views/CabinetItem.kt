@@ -1,5 +1,6 @@
 package com.weesnerdevelopment.serialcabinet.views
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -12,11 +13,18 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import com.weesnerdevelopment.serialcabinet.R
 import shared.serialCabinet.CabinetItem
+import shared.serialCabinet.Electronic
 
 @Composable
-fun SerialItem(item: CabinetItem) {
+fun SerialItem(
+    item: CabinetItem,
+    click: (id: Int?) -> Unit
+) {
     Column(
-        modifier = Modifier.padding(dimensionResource(R.dimen.space_default)).fillMaxWidth()
+        modifier = Modifier
+            .clickable(onClick = { click((item as Electronic).id) })
+            .padding(dimensionResource(R.dimen.space_default))
+            .fillMaxWidth()
     ) {
         val categoryText = when (item.categories.size) {
             0 -> ""
