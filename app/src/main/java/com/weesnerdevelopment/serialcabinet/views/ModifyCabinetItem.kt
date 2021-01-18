@@ -25,11 +25,11 @@ import com.weesnerdevelopment.serialcabinet.fullWidthWPadding
 import com.weesnerdevelopment.serialcabinet.smallHorizontal
 import com.weesnerdevelopment.serialcabinet.viewmodels.CategoriesViewModel
 import com.weesnerdevelopment.serialcabinet.viewmodels.ElectronicsViewModel
+import com.weesnerdevelopment.serialcabinet.viewmodels.ManufacturersViewModel
 import com.weesnerdevelopment.serialcabinet.viewmodels.ModifyCabinetItemViewModel
 import shared.serialCabinet.CabinetItem
 import shared.serialCabinet.Category
 import shared.serialCabinet.Electronic
-import shared.serialCabinet.Manufacturer
 import java.util.*
 
 @Composable
@@ -38,8 +38,10 @@ fun ModifySerialItem(
     itemViewModel: ModifyCabinetItemViewModel,
     categoriesViewModel: CategoriesViewModel,
     electronicsViewModel: ElectronicsViewModel,
+    manufacturersViewModel: ManufacturersViewModel,
     item: CabinetItem? = null,
-    barcodeCamera: () -> Unit
+    back: () -> Unit,
+    barcodeCamera: () -> Unit,
 ) {
     val context = AmbientContext.current
     val (choosingCategories, setChoosingCategories) = remember { mutableStateOf(false) }
@@ -68,6 +70,7 @@ fun ModifySerialItem(
     val modelNumberError by itemViewModel.modelNumberError.collectAsState()
 
     val allCategories by categoriesViewModel.allCategories.collectAsState()
+    val allManufacturers by manufacturersViewModel.allManufacturers.collectAsState()
 
     remember { categoriesViewModel.getCategories() }
 
@@ -204,12 +207,8 @@ fun ModifySerialItem(
                 text = if (item != null) R.string.update else R.string.save,
                 modifier = Modifier.align(Alignment.BottomEnd).basePadding
             ) {
-                if (itemViewModel.checkForErrors()) {
-                    println("has at least one...")
-                    return@Button
-                }
+                if (itemViewModel.checkForErrors()) return@Button
 
-                println("doesnt have any errors...")
                 electronicsViewModel.addElectronic(
                     Electronic(
                         owner = authViewModel.currentUser
@@ -222,11 +221,12 @@ fun ModifySerialItem(
                         barcodeImage = barcodeImage,
                         serialNumber = serialNumber,
                         modelNumber = modelNumber,
-                        manufacturer = Manufacturer(1, "random"),
+                        manufacturer = allManufacturers.first(),
                         manufactureDate = Date().time,
                         purchaseDate = Date().time
                     )
                 )
+                back()
             }
         }
     }

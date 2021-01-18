@@ -17,6 +17,7 @@ import androidx.core.view.WindowCompat
 import com.weesnerdevelopment.frontendutils.*
 import com.weesnerdevelopment.serialcabinet.viewmodels.CategoriesViewModel
 import com.weesnerdevelopment.serialcabinet.viewmodels.ElectronicsViewModel
+import com.weesnerdevelopment.serialcabinet.viewmodels.ManufacturersViewModel
 import com.weesnerdevelopment.serialcabinet.viewmodels.ModifyCabinetItemViewModel
 import com.weesnerdevelopment.serialcabinet.views.*
 import dagger.hilt.android.AndroidEntryPoint
@@ -37,13 +38,15 @@ class MainActivity : AppCompatActivity() {
             val modifiedItemViewModel = viewModel<ModifyCabinetItemViewModel>()
             val categoriesViewModel = viewModel<CategoriesViewModel>()
             val electronicsViewModel = viewModel<ElectronicsViewModel>()
+            val manufacturersViewModel = viewModel<ManufacturersViewModel>()
 
             SerialCabinetApp(
                 onBackPressedDispatcher,
                 authViewModel,
                 modifiedItemViewModel,
                 categoriesViewModel,
-                electronicsViewModel
+                electronicsViewModel,
+                manufacturersViewModel
             )
         }
     }
@@ -55,7 +58,8 @@ fun SerialCabinetApp(
     authViewModel: AuthViewModel,
     modifyCabinetItemViewModel: ModifyCabinetItemViewModel,
     categoriesViewModel: CategoriesViewModel,
-    electronicsViewModel: ElectronicsViewModel
+    electronicsViewModel: ElectronicsViewModel,
+    manufacturersViewModel: ManufacturersViewModel
 ) {
     val (userError, setUserError) = remember { mutableStateOf(false) }
 
@@ -113,7 +117,12 @@ fun SerialCabinetApp(
                         itemViewModel = modifyCabinetItemViewModel,
                         categoriesViewModel = categoriesViewModel,
                         electronicsViewModel = electronicsViewModel,
+                        manufacturersViewModel = manufacturersViewModel,
                         item = null,
+                        back = {
+                            modifyCabinetItemViewModel.clear()
+                            actions.upPress()
+                        },
                         barcodeCamera = actions.camera
                     )
                 }
@@ -153,6 +162,7 @@ fun SerialCabinetApp(
 
                 electronicsViewModel.getElectronics()
                 categoriesViewModel.getCategories()
+                manufacturersViewModel.getManufacturers()
 
                 setLoading(false)
             }
