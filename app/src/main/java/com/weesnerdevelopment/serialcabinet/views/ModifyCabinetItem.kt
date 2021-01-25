@@ -47,7 +47,7 @@ fun ModifySerialItem(
     val (choosingCategories, setChoosingCategories) = remember { mutableStateOf(false) }
     val (addCategory, setAddCategory) = remember { mutableStateOf(false) }
 
-    itemViewModel.currentItem(item)
+    remember { itemViewModel.currentItem(item) }
 
     val name by itemViewModel.name.collectAsState()
     val nameError by itemViewModel.nameError.collectAsState()
@@ -196,37 +196,54 @@ fun ModifySerialItem(
         }
 
         Box(Modifier.fillMaxSize()) {
-            Button(
-                enabled = listOf(
-                    nameError,
-                    descriptionError,
-                    barcodeError,
-                    serialNumberError,
-                    modelNumberError
-                ).all { !it },
-                text = if (item != null) R.string.update else R.string.save,
-                modifier = Modifier.align(Alignment.BottomEnd).basePadding
+            Row(
+                Modifier
+                    .wrapContentSize()
+                    .align(Alignment.BottomEnd)
+                    .basePadding
             ) {
-                if (itemViewModel.checkForErrors()) return@Button
+                if (item != null) {
+                    Button(
+                        text = R.string.delete,
+                    ) {
+                        if (item is Electronic) {
+                            electronicsViewModel.deleteElectronic(item)
+                            back()
+                        }
+                    }
+                }
+                Button(
+                    enabled = listOf(
+                        nameError,
+                        descriptionError,
+                        barcodeError,
+                        serialNumberError,
+                        modelNumberError
+                    ).all { !it },
+                    text = if (item != null) R.string.update else R.string.save,
+                    modifier = Modifier.padding(start = dimensionResource(R.dimen.space_default))
+                ) {
+                    if (itemViewModel.checkForErrors()) return@Button
 
-                electronicsViewModel.addElectronic(
-                    Electronic(
-                        owner = authViewModel.currentUser
-                            ?: throw IllegalArgumentException("No user found."),
-                        name = name,
-                        description = description,
-                        categories = categories,
-                        image = null,
-                        barcode = barcode,
-                        barcodeImage = barcodeImage,
-                        serialNumber = serialNumber,
-                        modelNumber = modelNumber,
-                        manufacturer = allManufacturers.first(),
-                        manufactureDate = Date().time,
-                        purchaseDate = Date().time
+                    electronicsViewModel.addElectronic(
+                        Electronic(
+                            owner = authViewModel.currentUser
+                                ?: throw IllegalArgumentException("No user found."),
+                            name = name,
+                            description = description,
+                            categories = categories,
+                            image = null,
+                            barcode = barcode,
+                            barcodeImage = barcodeImage,
+                            serialNumber = serialNumber,
+                            modelNumber = modelNumber,
+                            manufacturer = allManufacturers.first(),
+                            manufactureDate = Date().time,
+                            purchaseDate = Date().time
+                        )
                     )
-                )
-                back()
+                    back()
+                }
             }
         }
     }

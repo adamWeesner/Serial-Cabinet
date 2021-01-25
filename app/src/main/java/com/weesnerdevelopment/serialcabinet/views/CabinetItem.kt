@@ -10,7 +10,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import com.weesnerdevelopment.serialcabinet.R
 import shared.serialCabinet.CabinetItem
 import shared.serialCabinet.Electronic
@@ -37,7 +36,12 @@ fun SerialItem(
             )
         }
 
-        Text(text = item.name, fontWeight = FontWeight.Bold)
+        Text(text = item.name, style = MaterialTheme.typography.h6)
+        if (item is Electronic)
+            Text(
+                text = "${item.modelNumber} \u25CF ${item.serialNumber}",
+                style = MaterialTheme.typography.subtitle2
+            )
         Text(text = categoryText, style = MaterialTheme.typography.subtitle2)
     }
 }

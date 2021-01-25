@@ -46,4 +46,20 @@ class ElectronicsViewModel @ViewModelInject constructor(
             )
         }
     }
+
+    fun deleteElectronic(electronic: Electronic) {
+        viewModelScope.launch {
+            request(
+                { electronicsMiddleware.remove(electronic.id.toString()) },
+                {
+                    Kimchi.debug("successfully deleted Electronic $it")
+                    getElectronics()
+                },
+                {
+                    Kimchi.debug("failed to delete Electronic $it")
+                    failedElectronic.set("Failed to delete Electronic, try again.")
+                }
+            )
+        }
+    }
 }
